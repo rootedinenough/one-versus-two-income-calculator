@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>One Income vs. Two Incomes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    :root {
+      --bg:       #faf7f2;
+      --surface:  #ffffff;
+      --surface2: #f3efe8;
+      --border:   #e8e0d5;
+      --text:     #1e1e1e;
+      --muted:    #7a8499;
+      --gold:     #a0622a;
+      --gold-dim: #c4956a;
+      --shadow:   0 4px 24px rgba(0,0,0,0.07);
+    }
+ 
+    html { scroll-behavior: smooth; }
+ 
+    body {
+      background: var(--bg);
+      font-family: 'Jost', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 0 5rem;
+    }
+ 
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(160,98,42,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 600;
+      line-height: 1.15;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+    }
+    .hero h1 em { font-style: italic; color: var(--gold); }
+    .hero p {
+      font-size: 1rem;
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+ 
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+ 
+    .section-label {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.9rem;
+    }
+ 
+    .field { margin-bottom: 1.1rem; }
+    .field label {
+      display: block;
+      font-size: 0.74rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+    .field-hint {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 300;
+      margin-top: 0.35rem;
+      line-height: 1.5;
+    }
+ 
+    .input-wrap { position: relative; }
+    .input-prefix {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.95rem;
+      color: var(--muted);
+      pointer-events: none;
+    }
+    .input-wrap input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.65rem 1rem 0.65rem 2rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-wrap input::placeholder { color: #ccc5bb; }
+    .input-wrap input:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(160,98,42,0.1);
+    }
+    .input-suffix {
+      position: absolute;
+      right: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.75rem;
+      color: var(--muted);
+      pointer-events: none;
+    }
+    .input-wrap.no-suffix input { padding-right: 1rem; }
+ 
+    .divider { height: 1px; background: var(--border); margin: 1.4rem 0; }
+ 
+    .calc-btn {
+      width: 100%;
+      padding: 0.85rem;
+      margin-top: 0.5rem;
+      background: var(--gold);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(160,98,42,0.2);
+    }
+    .calc-btn:hover { background: #b5742f; box-shadow: 0 6px 28px rgba(160,98,42,0.28); }
+    .calc-btn:active { transform: scale(0.98); }
+ 
+    .tax-note {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 0.75rem;
+      font-weight: 300;
+      line-height: 1.5;
+    }
+ 
+    .shared-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      max-width: 620px;
+      margin: 0 auto 1.75rem;
+    }
+ 
+    .scenarios-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+      margin-bottom: 1.75rem;
+    }
+    @media (max-width: 700px) {
+      .scenarios-row { grid-template-columns: 1fr; }
+    }
+ 
+    .scenario-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+    }
+ 
+    .scenario-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 1.1rem;
+    }
+ 
+    .mini-result {
+      margin-top: 0.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .mini-result-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+    .mini-result-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .mini-result-sub {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 300;
+      margin-top: 0.3rem;
+    }
+    .mini-result.secondary { margin-top: 0.75rem; padding-top: 0.75rem; }
+    .mini-result.secondary .mini-result-value { color: var(--text); font-size: 1.3rem; }
+ 
+    .compare-btn-wrap { max-width: 420px; margin: 0 auto 1rem; }
+ 
+    .results-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-top: 2.5rem;
+    }
+ 
+    .empty-state {
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: 20px;
+      padding: 3rem 2rem;
+      text-align: center;
+      color: var(--muted);
+    }
+    .empty-state .icon { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.4; }
+    .empty-state p { font-size: 0.9rem; line-height: 1.6; font-weight: 300; }
+ 
+    .enough-card, .breakdown-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+    .enough-card.visible, .breakdown-card.visible { opacity: 1; transform: translateY(0); }
+ 
+    .enough-eyebrow {
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+      text-align: center;
+    }
+    .enough-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+ 
+    .bars-wrap {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 2rem;
+      height: 220px;
+      padding: 0 1rem;
+      overflow-x: auto;
+    }
+    .bar-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 100px;
+      height: 100%;
+    }
+    .bar-amount {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .bar-track { flex: 1; width: 52px; display: flex; align-items: flex-end; }
+    .bar-fill { width: 100%; border-radius: 6px 6px 0 0; transition: height 0.4s ease; min-height: 2px; }
+    .bar-ground { width: 100%; height: 2px; background: var(--text); opacity: 0.12; }
+    .bar-label {
+      margin-top: 0.6rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text);
+      text-align: center;
+    }
+ 
+    .breakdown-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 1.1rem;
+    }
+    .gap-summary {
+      font-size: 0.9rem;
+      color: var(--text);
+      font-weight: 300;
+      line-height: 1.6;
+      margin-bottom: 1.4rem;
+    }
+    .gap-summary strong { font-weight: 600; }
+ 
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 700px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+    .col-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      text-align: center;
+    }
+ 
+    .breakdown-rows { display: flex; flex-direction: column; gap: 0.5rem; }
+    .brow {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 0.83rem;
+      padding: 0.45rem 0;
+      border-bottom: 1px solid var(--border);
+      gap: 0.5rem;
+    }
+    .brow:last-child { border-bottom: none; }
+    .brow-label { color: var(--muted); font-weight: 300; }
+    .brow-val { font-weight: 500; color: var(--text); white-space: nowrap; }
+    .brow-val.subtract { color: #a03030; }
+    .brow-val.total { color: var(--gold); font-size: 0.95rem; }
+    .brow.total-row {
+      margin-top: 0.25rem;
+      padding-top: 0.65rem;
+      border-top: 2px solid var(--border);
+      border-bottom: none;
+      font-weight: 600;
+    }
+ 
+    .keep-rate-banner {
+      text-align: center;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 1rem;
+      margin-top: 1rem;
+    }
+    .keep-rate-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .keep-rate-sub {
+      font-size: 0.74rem;
+      color: var(--muted);
+      font-weight: 300;
+      margin-top: 0.35rem;
+      line-height: 1.5;
+    }
+ 
+    .time-figures {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 500px) {
+      .time-figures { grid-template-columns: 1fr; }
+    }
+    .time-figure {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 0.75rem;
+      text-align: center;
+    }
+    .time-fig-label {
+      font-size: 0.66rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+    .time-fig-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+    .time-fig-sub {
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-weight: 300;
+      margin-top: 0.25rem;
+    }
+ 
+    .time-reflection {
+      font-size: 0.88rem;
+      color: var(--text);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.7;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      padding-top: 1.25rem;
+      margin-top: 0.5rem;
+    }
+ 
+    .page-disclaimer {
+      max-width: 1100px;
+      margin: 3rem auto 0;
+      padding: 0 1.5rem;
+      font-size: 0.72rem;
+      font-style: italic;
+      color: #b0a898;
+      font-weight: 300;
+      line-height: 1.6;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+ 
+<div class="hero">
+  <div class="hero-eyebrow">One Income vs. Two Incomes</div>
+  <h1>Which income is worth <em>keeping?</em></h1>
+  <p>Every job comes with costs to maintain it. See what each income nets your household after costs are factored in, separately, in dollars and in time.</p>
+</div>
+ 
+<div class="page">
+ 
+  <!-- Shared household inputs -->
+  <div class="shared-card">
+    <div class="section-label">Household Base Expenses (Monthly)</div>
+    <div class="field-hint" style="margin-top:-0.6rem; margin-bottom: 1rem;">These stay the same regardless of who's working</div>
+ 
+    <div class="field">
+      <label>Housing</label>
+      <div class="field-hint">Rent/mortgage, utilities, property taxes, insurance, maintenance</div>
+      <div class="input-wrap">
+        <span class="input-prefix">$</span>
+        <input type="number" id="expHousing" placeholder="1,500" min="0" />
+        <span class="input-suffix">/ mo</span>
+      </div>
+    </div>
+ 
+    <div class="field">
+      <label>Food</label>
+      <div class="field-hint">Groceries and takeout</div>
+      <div class="input-wrap">
+        <span class="input-prefix">$</span>
+        <input type="number" id="expFood" placeholder="600" min="0" />
+        <span class="input-suffix">/ mo</span>
+      </div>
+    </div>
+ 
+    <div class="field">
+      <label>Transportation</label>
+      <div class="field-hint">Car payments, insurance, fuel, maintenance - do not include workday commuting costs</div>
+      <div class="input-wrap">
+        <span class="input-prefix">$</span>
+        <input type="number" id="expTransport" placeholder="400" min="0" />
+        <span class="input-suffix">/ mo</span>
+      </div>
+    </div>
+ 
+    <div class="field">
+      <label>Other Monthly Expenses</label>
+      <div class="field-hint">Healthcare, retirement savings, clothing, subscriptions, gifts - do not include clothing or subscriptions for work purposes</div>
+      <div class="input-wrap">
+        <span class="input-prefix">$</span>
+        <input type="number" id="expOther" placeholder="500" min="0" />
+        <span class="input-suffix">/ mo</span>
+      </div>
+    </div>
+ 
+    <div class="divider"></div>
+ 
+    <div class="field">
+      <label>Childcare — If Both Work</label>
+      <div class="input-wrap">
+        <span class="input-prefix">$</span>
+        <input type="number" id="childcareBoth" placeholder="1,600" min="0" />
+        <span class="input-suffix">/ mo</span>
+      </div>
+    </div>
+ 
+    <div class="field">
+      <label>Childcare — If Only One Works</label>
+      <div class="field-hint">Some one-income households still use some part-time care</div>
+      <div class="input-wrap">
+        <span class="input-prefix">$</span>
+        <input type="number" id="childcareOne" placeholder="0" min="0" />
+        <span class="input-suffix">/ mo</span>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- First and Second income cards, symmetric -->
+  <div class="section-label" style="text-align:center;">Now Look at Each Income On Its Own</div>
+  <div class="scenarios-row">
+ 
+    <div class="scenario-card">
+      <div class="scenario-title">First Income</div>
+      <div class="field">
+        <label>Annual Gross Income</label>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="number" id="firstIncome" placeholder="85,000" min="0" />
+          <span class="input-suffix">/ yr</span>
+        </div>
+      </div>
+ 
+      <div class="divider"></div>
+      <div class="section-label">Cost of Maintaining This Income</div>
+ 
+      <div class="field">
+        <label>Wardrobe &amp; Clothing Maintenance</label>
+        <div class="field-hint">Professional attire, dry cleaning, alterations</div>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="number" id="firstWardrobe" placeholder="80" min="0" />
+          <span class="input-suffix">/ mo</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Hair &amp; Grooming Maintenance</label>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="number" id="firstHair" placeholder="60" min="0" />
+          <span class="input-suffix">/ mo</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Commute</label>
+        <div class="field-hint">Gas, transit, parking, tolls for this job specifically</div>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="number" id="firstCommuteCost" placeholder="150" min="0" />
+          <span class="input-suffix">/ mo</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Coffee &amp; Lunches Out</label>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="number" id="firstLunches" placeholder="140" min="0" />
+          <span class="input-suffix">/ mo</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Other Work-Related Costs</label>
+        <div class="field-hint">Subscriptions, professional dues, supplies</div>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="number" id="firstOtherCost" placeholder="40" min="0" />
+          <span class="input-suffix">/ mo</span>
+        </div>
+      </div>
+ 
+      <div class="divider"></div>
+      <div class="section-label">Time Cost of This Income</div>
+ 
+      <div class="field">
+        <label>Commute (Round Trip)</label>
+        <div class="input-wrap no-suffix">
+          <input type="number" id="firstTimeCommute" placeholder="50" min="0" />
+          <span class="input-suffix">min / day</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Getting Ready for Work</label>
+        <div class="field-hint">Time beyond what you'd spend getting ready anyway</div>
+        <div class="input-wrap no-suffix">
+          <input type="number" id="firstTimePrep" placeholder="20" min="0" />
+          <span class="input-suffix">min / day</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Other Overhead</label>
+        <div class="field-hint">Drop-off/pickup, packing lunches, other logistics</div>
+        <div class="input-wrap no-suffix">
+          <input type="number" id="firstTimeOther" placeholder="15" min="0" />
+          <span class="input-suffix">min / day</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Workdays Per Week</label>
+        <div class="input-wrap no-suffix">
+          <input type="number" id="firstWorkdays" placeholder="5" min="0" max="7" />
+          <span class="input-suffix">days</span>
+        </div>
+      </div>
+ 
+      <div class="mini-result" id="mini-first" style="display:none;">
+        <div class="mini-result-label">Net Added to Household</div>
+        <div class="mini-result-value" id="mini-first-val"></div>
+        <div class="mini-result-sub" id="mini-first-sub"></div>
+      </div>
+      <div class="mini-result secondary" id="mini-first-time" style="display:none;">
+        <div class="mini-result-label">Time Cost</div>
+        <div class="mini-result-value" id="mini-first-time-val"></div>
+        <div class="mini-result-sub" id="mini-first-time-sub"></div>
+      </div>
+    </div>
+ 
+    <div class="scenario-card">
+      <div class="scenario-title">Second Income</div>
+      <div class="field">
+        <label>Annual Gross Income</label>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="number" id="secondIncome" placeholder="55,000" min="0" />
+          <span class="input-suffix">/ yr</span>
+        </div>
+      </div>
+ 
+      <div class="divider"></div>
+      <div class="section-label">Cost of Maintaining This Income</div>
+ 
+      <div class="field">
+        <label>Wardrobe &amp; Clothing Maintenance</label>
+        <div class="field-hint">Professional attire, dry cleaning, alterations</div>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="number" id="secondWardrobe" placeholder="80" min="0" />
+          <span class="input-suffix">/ mo</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Hair &amp; Grooming Maintenance</label>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="number" id="secondHair" placeholder="60" min="0" />
+          <span class="input-suffix">/ mo</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Commute</label>
+        <div class="field-hint">Gas, transit, parking, tolls for this job specifically</div>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="number" id="secondCommuteCost" placeholder="150" min="0" />
+          <span class="input-suffix">/ mo</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Coffee &amp; Lunches Out</label>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="number" id="secondLunches" placeholder="140" min="0" />
+          <span class="input-suffix">/ mo</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Other Work-Related Costs</label>
+        <div class="field-hint">Subscriptions, professional dues, supplies</div>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="number" id="secondOtherCost" placeholder="40" min="0" />
+          <span class="input-suffix">/ mo</span>
+        </div>
+      </div>
+ 
+      <div class="divider"></div>
+      <div class="section-label">Time Cost of This Income</div>
+ 
+      <div class="field">
+        <label>Commute (Round Trip)</label>
+        <div class="input-wrap no-suffix">
+          <input type="number" id="secondTimeCommute" placeholder="50" min="0" />
+          <span class="input-suffix">min / day</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Getting Ready for Work</label>
+        <div class="field-hint">Time beyond what you'd spend getting ready anyway</div>
+        <div class="input-wrap no-suffix">
+          <input type="number" id="secondTimePrep" placeholder="20" min="0" />
+          <span class="input-suffix">min / day</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Other Overhead</label>
+        <div class="field-hint">Drop-off/pickup, packing lunches, other logistics</div>
+        <div class="input-wrap no-suffix">
+          <input type="number" id="secondTimeOther" placeholder="15" min="0" />
+          <span class="input-suffix">min / day</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Workdays Per Week</label>
+        <div class="input-wrap no-suffix">
+          <input type="number" id="secondWorkdays" placeholder="5" min="0" max="7" />
+          <span class="input-suffix">days</span>
+        </div>
+      </div>
+ 
+      <div class="mini-result" id="mini-second" style="display:none;">
+        <div class="mini-result-label">Net Added to Household</div>
+        <div class="mini-result-value" id="mini-second-val"></div>
+        <div class="mini-result-sub" id="mini-second-sub"></div>
+      </div>
+      <div class="mini-result secondary" id="mini-second-time" style="display:none;">
+        <div class="mini-result-label">Time Cost</div>
+        <div class="mini-result-value" id="mini-second-time-val"></div>
+        <div class="mini-result-sub" id="mini-second-time-sub"></div>
+      </div>
+    </div>
+ 
+  </div>
+ 
+  <div class="compare-btn-wrap">
+    <button class="calc-btn" onclick="runComparison()">Compare Both Incomes →</button>
+    <div class="tax-note">Taxes estimated using 2026 US federal brackets (married filing jointly), per IRS Revenue Procedure 2025-32. A 5% state income tax is added as a rough national average — actual state taxes vary. No state income tax applies in AK, FL, NV, NH, SD, TN, TX, WA, and WY. This estimate does not account for child tax credits or childcare tax credits, which may reduce your tax liability.</div>
+  </div>
+ 
+  <div class="results-panel" id="resultsPanel">
+    <div class="empty-state">
+      <div class="icon">◎</div>
+      <p>Fill in both incomes, their costs, and your household expenses,<br>then click <strong>Compare Both Incomes</strong>.</p>
+    </div>
+  </div>
+ 
+</div>
+ 
+<p class="page-disclaimer">This calculator is for educational purposes only and does not constitute financial advice. Individual financial situations vary, and readers should consider consulting a qualified financial professional before making major financial decisions. Time estimates are offered for personal reflection only and are not part of the financial calculation.</p>
+ 
+<script>
+  const STANDARD_DEDUCTION = 32200;
+  const STATE_RATE = 0.05;
+ 
+  const BRACKETS = [
+    { limit: 24800,    rate: 0.10 },
+    { limit: 100800,   rate: 0.12 },
+    { limit: 211400,   rate: 0.22 },
+    { limit: 403550,   rate: 0.24 },
+    { limit: 512450,   rate: 0.32 },
+    { limit: 768700,   rate: 0.35 },
+    { limit: Infinity, rate: 0.37 },
+  ];
+ 
+  function federalTax(taxable) {
+    if (taxable <= 0) return 0;
+    let tax = 0, prev = 0;
+    for (const b of BRACKETS) {
+      if (taxable <= prev) break;
+      tax += (Math.min(taxable, b.limit) - prev) * b.rate;
+      prev = b.limit;
+    }
+    return tax;
+  }
+ 
+  function totalTaxFromGross(gross) {
+    const taxable = Math.max(0, gross - STANDARD_DEDUCTION);
+    return federalTax(taxable) + gross * STATE_RATE;
+  }
+ 
+  function grossFromNet(netNeeded) {
+    if (netNeeded <= 0) return 0;
+    let lo = netNeeded, hi = netNeeded * 3;
+    for (let i = 0; i < 60; i++) {
+      const mid = (lo + hi) / 2;
+      const net = mid - totalTaxFromGross(mid);
+      if (net < netNeeded) lo = mid; else hi = mid;
+    }
+    return (lo + hi) / 2;
+  }
+ 
+  function fmt(n) {
+    return '$' + Math.round(Math.abs(n)).toLocaleString();
+  }
+ 
+  function val(id) {
+    return parseFloat(document.getElementById(id).value) || 0;
+  }
+ 
+  function timeStats(commute, prep, other, workdays) {
+    const overheadMinPerDay = commute + prep + other;
+    const hoursPerWeek = (overheadMinPerDay * workdays) / 60;
+    const hoursPerYear = hoursPerWeek * 52;
+    const wakingDaysPerYear = hoursPerYear / 16;
+    return { hoursPerWeek, hoursPerYear, wakingDaysPerYear };
+  }
+ 
+  function runComparison() {
+    const expHousing = val('expHousing');
+    const expFood = val('expFood');
+    const expTransport = val('expTransport');
+    const expOther = val('expOther');
+    const baseMonthly = expHousing + expFood + expTransport + expOther;
+ 
+    const childcareBoth = val('childcareBoth');
+    const childcareOne = val('childcareOne');
+    const incrementalChildcareAnnual = Math.max(0, childcareBoth - childcareOne) * 12;
+ 
+    const firstIncome = val('firstIncome');
+    const firstMaintenanceMonthly = val('firstWardrobe') + val('firstHair') + val('firstCommuteCost') + val('firstLunches') + val('firstOtherCost');
+    const firstTime = timeStats(val('firstTimeCommute'), val('firstTimePrep'), val('firstTimeOther'), val('firstWorkdays'));
+ 
+    const secondIncome = val('secondIncome');
+    const secondMaintenanceMonthly = val('secondWardrobe') + val('secondHair') + val('secondCommuteCost') + val('secondLunches') + val('secondOtherCost');
+    const secondTime = timeStats(val('secondTimeCommute'), val('secondTimePrep'), val('secondTimeOther'), val('secondWorkdays'));
+ 
+    if (baseMonthly === 0 && firstIncome === 0 && secondIncome === 0) {
+      alert('Please enter at least your household expenses and one income.');
+      return;
+    }
+ 
+    // ── Enough numbers for each path ──
+    const bothEnough = grossFromNet((baseMonthly + childcareBoth + firstMaintenanceMonthly + secondMaintenanceMonthly) * 12);
+    const firstOnlyEnough = grossFromNet((baseMonthly + childcareOne + firstMaintenanceMonthly) * 12);
+    const secondOnlyEnough = grossFromNet((baseMonthly + childcareOne + secondMaintenanceMonthly) * 12);
+ 
+    // ── What each income nets on its own, given the other is already working ──
+    const combinedTax = totalTaxFromGross(firstIncome + secondIncome);
+    const taxFirstAlone = totalTaxFromGross(firstIncome);
+    const taxSecondAlone = totalTaxFromGross(secondIncome);
+ 
+    const marginalTaxFirst = Math.max(0, combinedTax - taxSecondAlone);
+    const marginalTaxSecond = Math.max(0, combinedTax - taxFirstAlone);
+ 
+    const firstMaintenanceAnnual = firstMaintenanceMonthly * 12;
+    const secondMaintenanceAnnual = secondMaintenanceMonthly * 12;
+ 
+    const netFirst = firstIncome - marginalTaxFirst - firstMaintenanceAnnual - incrementalChildcareAnnual;
+    const netSecond = secondIncome - marginalTaxSecond - secondMaintenanceAnnual - incrementalChildcareAnnual;
+ 
+    const keepRateFirst = firstIncome > 0 ? (netFirst / firstIncome) * 100 : 0;
+    const keepRateSecond = secondIncome > 0 ? (netSecond / secondIncome) * 100 : 0;
+ 
+    // ── Mini results on the cards ──
+    document.getElementById('mini-first').style.display = 'block';
+    document.getElementById('mini-first-val').textContent = firstIncome > 0 ? fmt(netFirst / 12) + '/mo' : '—';
+    document.getElementById('mini-first-sub').textContent = firstIncome > 0 ? fmt(netFirst) + '/yr · keeps ' + Math.max(0, Math.round(keepRateFirst)) + '%' : '';
+ 
+    document.getElementById('mini-first-time').style.display = 'block';
+    document.getElementById('mini-first-time-val').textContent = firstTime.hoursPerWeek.toFixed(1) + ' hrs/wk';
+    document.getElementById('mini-first-time-sub').textContent = '≈ ' + Math.round(firstTime.wakingDaysPerYear) + ' waking days/yr';
+ 
+    document.getElementById('mini-second').style.display = 'block';
+    document.getElementById('mini-second-val').textContent = secondIncome > 0 ? fmt(netSecond / 12) + '/mo' : '—';
+    document.getElementById('mini-second-sub').textContent = secondIncome > 0 ? fmt(netSecond) + '/yr · keeps ' + Math.max(0, Math.round(keepRateSecond)) + '%' : '';
+ 
+    document.getElementById('mini-second-time').style.display = 'block';
+    document.getElementById('mini-second-time-val').textContent = secondTime.hoursPerWeek.toFixed(1) + ' hrs/wk';
+    document.getElementById('mini-second-time-sub').textContent = '≈ ' + Math.round(secondTime.wakingDaysPerYear) + ' waking days/yr';
+ 
+    renderResults({
+      bothEnough, firstOnlyEnough, secondOnlyEnough,
+      firstIncome, secondIncome,
+      marginalTaxFirst, marginalTaxSecond,
+      firstMaintenanceAnnual, secondMaintenanceAnnual,
+      incrementalChildcareAnnual,
+      netFirst, netSecond, keepRateFirst, keepRateSecond,
+      firstTime, secondTime
+    });
+  }
+ 
+  function renderResults(r) {
+    const panel = document.getElementById('resultsPanel');
+    panel.innerHTML = '';
+ 
+    // ── Card 1: Enough number bars, three paths ──
+    const maxGross = Math.max(1, r.bothEnough, r.firstOnlyEnough, r.secondOnlyEnough);
+    const bars = [
+      { label: 'Both Incomes', gross: r.bothEnough, color: 'var(--gold)' },
+      { label: 'First Only', gross: r.firstOnlyEnough, color: 'var(--gold-dim)' },
+      { label: 'Second Only', gross: r.secondOnlyEnough, color: 'var(--muted)' },
+    ];
+    const barsHtml = bars.map(b => {
+      const heightPct = (b.gross / maxGross) * 100;
+      return `
+        <div class="bar-col">
+          <div class="bar-amount">${b.gross > 0 ? fmt(b.gross / 12) + '/mo' : '—'}</div>
+          <div class="bar-track"><div class="bar-fill" style="height:${heightPct}%; background:${b.color};"></div></div>
+          <div class="bar-ground"></div>
+          <div class="bar-label">${b.label}</div>
+        </div>
+      `;
+    }).join('');
+ 
+    const enoughCard = document.createElement('div');
+    enoughCard.className = 'enough-card';
+    enoughCard.innerHTML = `
+      <div class="enough-eyebrow">The Comparison</div>
+      <div class="enough-label">Income needed to cover expenses in each scenario</div>
+      <div class="bars-wrap">${barsHtml}</div>
+    `;
+    panel.appendChild(enoughCard);
+    setTimeout(() => enoughCard.classList.add('visible'), 30);
+ 
+    // ── Card 2: What each income adds to the household ──
+    function incomeBlock(name, gross, marginalTax, maintenance, childcare, net, keepRate) {
+      return `
+        <div>
+          <div class="col-heading">${name}</div>
+          <div class="breakdown-rows">
+            <div class="brow"><span class="brow-label">Gross pay</span><span class="brow-val">${fmt(gross)}/yr</span></div>
+            <div class="brow"><span class="brow-label">− Tax (stacked on the other income)</span><span class="brow-val subtract">− ${fmt(marginalTax)}</span></div>
+            <div class="brow"><span class="brow-label">− Cost of maintaining this income</span><span class="brow-val subtract">− ${fmt(maintenance)}</span></div>
+            <div class="brow"><span class="brow-label">− Childcare this income requires</span><span class="brow-val subtract">− ${fmt(childcare)}</span></div>
+            <div class="brow total-row"><span class="brow-label" style="color:var(--text);font-weight:600;">Net added</span><span class="brow-val total">${fmt(net)}/yr</span></div>
+          </div>
+          <div class="keep-rate-banner">
+            <div class="keep-rate-value">${Math.max(0, Math.round(keepRate))}%</div>
+            <div class="keep-rate-sub">of every dollar this income earns reaches the household</div>
+          </div>
+        </div>
+      `;
+    }
+ 
+    const moneyCard = document.createElement('div');
+    moneyCard.className = 'breakdown-card';
+    moneyCard.innerHTML = `
+      <div class="breakdown-title">What Each Income Adds to the Household</div>
+      <div class="gap-summary">Assuming a two-income scenario, this shows how much each income adds to the household above the other income, assuming the other income is the base.</div>
+      <div class="two-col">
+        ${incomeBlock('First Income', r.firstIncome, r.marginalTaxFirst, r.firstMaintenanceAnnual, r.incrementalChildcareAnnual, r.netFirst, r.keepRateFirst)}
+        ${incomeBlock('Second Income', r.secondIncome, r.marginalTaxSecond, r.secondMaintenanceAnnual, r.incrementalChildcareAnnual, r.netSecond, r.keepRateSecond)}
+      </div>
+    `;
+    panel.appendChild(moneyCard);
+    setTimeout(() => moneyCard.classList.add('visible'), 80);
+ 
+    // ── Card 3: Time, side by side ──
+    function timeBlock(name, t) {
+      return `
+        <div>
+          <div class="col-heading">${name}</div>
+          <div class="time-figures">
+            <div class="time-figure">
+              <div class="time-fig-label">Per Week</div>
+              <div class="time-fig-value">${t.hoursPerWeek.toFixed(1)}</div>
+              <div class="time-fig-sub">hours</div>
+            </div>
+            <div class="time-figure">
+              <div class="time-fig-label">Per Year</div>
+              <div class="time-fig-value">${Math.round(t.hoursPerYear).toLocaleString()}</div>
+              <div class="time-fig-sub">hours</div>
+            </div>
+            <div class="time-figure">
+              <div class="time-fig-label">≈</div>
+              <div class="time-fig-value">${Math.round(t.wakingDaysPerYear)}</div>
+              <div class="time-fig-sub">waking days/yr</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+ 
+    const timeCard = document.createElement('div');
+    timeCard.className = 'breakdown-card';
+    timeCard.innerHTML = `
+      <div class="breakdown-title">What Each Income Costs in Time</div>
+      <div class="two-col">
+        ${timeBlock('First Income', r.firstTime)}
+        ${timeBlock('Second Income', r.secondTime)}
+      </div>
+      <div class="time-reflection">Dropping one income may also change how much time you can put toward things that matter to you.</div>
+    `;
+    panel.appendChild(timeCard);
+    setTimeout(() => timeCard.classList.add('visible'), 130);
+  }
+</script>
+ 
+</body>
+</html>
